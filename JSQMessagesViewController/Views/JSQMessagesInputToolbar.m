@@ -109,10 +109,10 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     BOOL hasText = [self.contentView.textView hasText];
 
     if (self.sendButtonOnRight) {
-        self.contentView.rightBarButtonItem.enabled = hasText;
+        self.contentView.rightBarButtonItem.enabled = YES;
     }
     else {
-        self.contentView.leftBarButtonItem.enabled = hasText;
+        self.contentView.leftBarButtonItem.enabled = YES;
     }
 }
 

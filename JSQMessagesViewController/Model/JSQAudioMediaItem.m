@@ -257,7 +257,7 @@ static JSQAudioMediaItem *audioItemObject;
 
 - (CGSize)mediaViewDisplaySize
 {
-    return CGSizeMake(160.0f,
+    return CGSizeMake(300.0f,
                       self.audioViewAttributes.controlInsets.top +
                       self.audioViewAttributes.controlInsets.bottom +
                       40);
@@ -291,8 +291,8 @@ static JSQAudioMediaItem *audioItemObject;
         // create the play button
         CGRect buttonFrame = CGRectMake(leftInset,
                                         self.audioViewAttributes.controlInsets.top,
-                                        self.audioViewAttributes.playButtonImage.size.width,
-                                        self.audioViewAttributes.playButtonImage.size.height);
+                                        size.height - self.audioViewAttributes.controlInsets.top - self.audioViewAttributes.controlInsets.bottom,
+                                        size.height - self.audioViewAttributes.controlInsets.top - self.audioViewAttributes.controlInsets.bottom);
         
         self.playButton = [[UIButton alloc] initWithFrame:buttonFrame];
         [self.playButton setImage:self.audioViewAttributes.playButtonImage forState:UIControlStateNormal];

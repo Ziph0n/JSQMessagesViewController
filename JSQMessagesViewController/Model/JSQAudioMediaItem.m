@@ -37,12 +37,38 @@
 
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 
++ (JSQAudioMediaItem*) audioItemObject;
++ (void) setAudioItemObject:(JSQAudioMediaItem *) object;
+
 @end
 
 
 @implementation JSQAudioMediaItem
 
+static JSQAudioMediaItem *audioItemObject;
+
 #pragma mark - Initialization
+
++ (JSQAudioMediaItem *) audioItemObject {
+    if (audioItemObject == nil) {
+        //audioItemObject = self;
+        return nil;
+    } else {
+        return audioItemObject;
+    }
+}
+
++ (void) setAudioItemObject:(JSQAudioMediaItem *) object {
+    audioItemObject = object;
+}
+
++ (void) stopAudioItemObject {
+    JSQAudioMediaItem.audioItemObject.playButton.selected = NO;
+    [JSQAudioMediaItem.audioItemObject stopProgressTimer];
+    [JSQAudioMediaItem.audioItemObject.audioPlayer stop];
+    
+    JSQAudioMediaItem.audioItemObject = nil;
+}
 
 - (instancetype)initWithData:(NSData *)audioData audioViewAttributes:(JSQAudioMediaViewAttributes *)audioViewAttributes
 {
@@ -161,6 +187,7 @@
 
 - (void)onPlayButton:(UIButton *)sender
 {
+    
     NSString *category = [AVAudioSession sharedInstance].category;
     AVAudioSessionCategoryOptions options = [AVAudioSession sharedInstance].categoryOptions;
 
@@ -169,6 +196,8 @@
         [[AVAudioSession sharedInstance] setCategory:self.audioViewAttributes.audioCategory
                                          withOptions:self.audioViewAttributes.audioCategoryOptions
                                                error:&error];
+        [[AVAudioSession sharedInstance] setActive:YES error:&error];
+
         if (self.delegate) {
             [self.delegate audioMediaItem:self didChangeAudioCategory:category options:options error:error];
         }
@@ -178,6 +207,8 @@
         self.playButton.selected = NO;
         [self stopProgressTimer];
         [self.audioPlayer stop];
+        
+        JSQAudioMediaItem.audioItemObject = nil;
     }
     else {
         // fade the button from play to pause
@@ -191,6 +222,12 @@
 
         [self startProgressTimer];
         [self.audioPlayer play];
+        
+        JSQAudioMediaItem.audioItemObject.playButton.selected = NO;
+        [JSQAudioMediaItem.audioItemObject stopProgressTimer];
+        [JSQAudioMediaItem.audioItemObject.audioPlayer stop];
+        
+        JSQAudioMediaItem.audioItemObject = self;
     }
 }
 
@@ -198,6 +235,8 @@
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
                        successfully:(BOOL)flag {
+
+    JSQAudioMediaItem.audioItemObject = nil;
 
     // set progress to full, then fade back to the default state
     [self stopProgressTimer];
@@ -221,7 +260,7 @@
     return CGSizeMake(160.0f,
                       self.audioViewAttributes.controlInsets.top +
                       self.audioViewAttributes.controlInsets.bottom +
-                      self.audioViewAttributes.playButtonImage.size.height);
+                      40);
 }
 
 - (UIView *)mediaView

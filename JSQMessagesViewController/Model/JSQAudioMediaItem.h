@@ -61,11 +61,13 @@ didChangeAudioCategory:(NSString *)category
  */
 @property (nonatomic, strong, nullable) NSData *audioData;
 
++ (void) stopAudioItemObject;
+
 /**
  *  Initializes and returns a audio media item having the given audioData.
  *
  *  @param audioData              The data object that contains the audio resource.
- *  @param audioViewConfiguration The view attributes to configure the appearance of the audio media view.
+ *  @param audioViewAttributes The view attributes to configure the appearance of the audio media view.
  *
  *  @return An initialized `JSQAudioMediaItem`.
  *

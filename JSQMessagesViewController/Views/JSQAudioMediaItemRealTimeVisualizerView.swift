@@ -7,10 +7,36 @@
 //
 
 import UIKit
-import ChameleonFramework
 import AVFoundation
 
-class RealTimeVisualizerView: UIView {
+extension UIDevice {
+    
+    class func is4SizediPhone() -> Bool {
+        if UIScreen.main.bounds.size.height == 480 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    class func is5SizediPhone() -> Bool {
+        if UIScreen.main.bounds.size.height == 568 {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    class func isNotPlusSizediPhone() -> Bool {
+        if UIScreen.main.bounds.size.height == 667 {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+@objc public class JSQAudioMediaItemRealTimeVisualizerView: UIView {
     
     @IBOutlet var backgroundBar1: UIView!
     @IBOutlet var backgroundBar2: UIView!
@@ -101,12 +127,12 @@ class RealTimeVisualizerView: UIView {
     
     var values: [CGFloat]!
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         if !areBarsConfigured {

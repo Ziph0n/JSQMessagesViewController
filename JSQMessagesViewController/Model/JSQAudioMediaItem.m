@@ -24,6 +24,7 @@
 #import "UIImage+JSQMessages.h"
 #import "UIColor+JSQMessages.h"
 
+#import "JSQMessagesViewController/JSQMessagesViewController-Swift.h"
 
 @interface JSQAudioMediaItem ()
 
@@ -51,7 +52,6 @@ static JSQAudioMediaItem *audioItemObject;
 
 + (JSQAudioMediaItem *) audioItemObject {
     if (audioItemObject == nil) {
-        //audioItemObject = self;
         return nil;
     } else {
         return audioItemObject;
@@ -63,7 +63,13 @@ static JSQAudioMediaItem *audioItemObject;
 }
 
 + (void) stopAudioItemObject {
-    JSQAudioMediaItem.audioItemObject.playButton.selected = NO;
+    [UIView transitionWithView:JSQAudioMediaItem.audioItemObject.playButton
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        JSQAudioMediaItem.audioItemObject.playButton.selected = NO;
+                    }
+                    completion:nil];
     [JSQAudioMediaItem.audioItemObject stopProgressTimer];
     [JSQAudioMediaItem.audioItemObject.audioPlayer stop];
     
@@ -204,7 +210,13 @@ static JSQAudioMediaItem *audioItemObject;
     }
 
     if (self.audioPlayer.playing) {
-        self.playButton.selected = NO;
+        [UIView transitionWithView:self.playButton
+                          duration:.2
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            self.playButton.selected = NO;
+                        }
+                        completion:nil];
         [self stopProgressTimer];
         [self.audioPlayer stop];
         
@@ -223,7 +235,13 @@ static JSQAudioMediaItem *audioItemObject;
         [self startProgressTimer];
         [self.audioPlayer play];
         
-        JSQAudioMediaItem.audioItemObject.playButton.selected = NO;
+        [UIView transitionWithView:JSQAudioMediaItem.audioItemObject.playButton
+                          duration:.2
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{
+                            JSQAudioMediaItem.audioItemObject.playButton.selected = NO;
+                        }
+                        completion:nil];
         [JSQAudioMediaItem.audioItemObject stopProgressTimer];
         [JSQAudioMediaItem.audioItemObject.audioPlayer stop];
         
@@ -257,7 +275,7 @@ static JSQAudioMediaItem *audioItemObject;
 
 - (CGSize)mediaViewDisplaySize
 {
-    return CGSizeMake(300.0f,
+    return CGSizeMake(280.0f,
                       self.audioViewAttributes.controlInsets.top +
                       self.audioViewAttributes.controlInsets.bottom +
                       40);
@@ -295,6 +313,7 @@ static JSQAudioMediaItem *audioItemObject;
                                         size.height - self.audioViewAttributes.controlInsets.top - self.audioViewAttributes.controlInsets.bottom);
         
         self.playButton = [[UIButton alloc] initWithFrame:buttonFrame];
+        self.playButton.adjustsImageWhenHighlighted = NO;
         [self.playButton setImage:self.audioViewAttributes.playButtonImage forState:UIControlStateNormal];
         [self.playButton setImage:self.audioViewAttributes.pauseButtonImage forState:UIControlStateSelected];
         [self.playButton addTarget:self action:@selector(onPlayButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -326,6 +345,7 @@ static JSQAudioMediaItem *audioItemObject;
         self.progressLabel.textColor = self.audioViewAttributes.tintColor;
         self.progressLabel.font = self.audioViewAttributes.labelFont;
         self.progressLabel.text = maxWidthString;
+        self.progressLabel.alpha = 0.8f;
 
         // sizeToFit adjusts the frame's height to the font
         [self.progressLabel sizeToFit];
@@ -337,6 +357,14 @@ static JSQAudioMediaItem *audioItemObject;
         self.progressLabel.text = durationString;
         [playView addSubview:self.progressLabel];
 
+        /*JSQAudioMediaItemRealTimeVisualizerView *realTimeVisualizerView = [[JSQAudioMediaItemRealTimeVisualizerView alloc] init];
+        CGFloat xOffset = self.playButton.frame.origin.x + self.playButton.frame.size.width + self.audioViewAttributes.controlPadding;
+        CGFloat width = labelFrame.origin.x - xOffset - self.audioViewAttributes.controlPadding;
+        realTimeVisualizerView.frame = CGRectMake(xOffset, (size.height - self.progressView.frame.size.height) / 2,
+                                             width, self.progressView.frame.size.height);
+        self.progressView.tintColor = self.audioViewAttributes.tintColor;
+        [playView addSubview: realTimeVisualizerView];*/
+        
         // create a progress bar
         self.progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
         CGFloat xOffset = self.playButton.frame.origin.x + self.playButton.frame.size.width + self.audioViewAttributes.controlPadding;

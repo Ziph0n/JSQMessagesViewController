@@ -877,6 +877,10 @@ JSQMessagesKeyboardControllerDelegate>
     self.selectedIndexPathForMenu = nil;
 }
 
+- (IBAction)didPressFinishButton:(id)sender {
+    NSAssert(NO, @"Error! required method not implemented in subclass. Need to implement %s", __PRETTY_FUNCTION__);
+}
+
 #pragma mark - Key-value observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

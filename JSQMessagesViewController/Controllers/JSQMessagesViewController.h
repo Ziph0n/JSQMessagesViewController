@@ -172,6 +172,8 @@
  */
 @property (assign, nonatomic) CGFloat topContentAdditionalInset;
 
+@property (strong, nonatomic) IBOutlet UIButton *finishButton;
+
 #pragma mark - Class methods
 
 /**
@@ -323,5 +325,7 @@
  @param notification The posted notification.
  */
 - (void)didReceiveMenuWillHideNotification:(NSNotification *)notification;
+
+- (IBAction)didPressFinishButton:(id)sender;
 
 @end

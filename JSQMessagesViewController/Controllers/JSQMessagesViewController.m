@@ -202,6 +202,8 @@ JSQMessagesKeyboardControllerDelegate>
 
     self.topContentAdditionalInset = 0.0f;
 
+    self.bottomContentAdditionalInset = 0.0f;
+
     [self jsq_updateCollectionViewInsets];
 
     // Don't set keyboardController if client creates custom content view via -loadToolbarContentView
@@ -256,6 +258,12 @@ JSQMessagesKeyboardControllerDelegate>
 - (void)setTopContentAdditionalInset:(CGFloat)topContentAdditionalInset
 {
     _topContentAdditionalInset = topContentAdditionalInset;
+    [self jsq_updateCollectionViewInsets];
+}
+
+- (void)setBottomContentAdditionalInset:(CGFloat)bottomContentAdditionalInset
+{
+    _bottomContentAdditionalInset = bottomContentAdditionalInset;
     [self jsq_updateCollectionViewInsets];
 }
 
@@ -881,6 +889,10 @@ JSQMessagesKeyboardControllerDelegate>
     NSAssert(NO, @"Error! required method not implemented in subclass. Need to implement %s", __PRETTY_FUNCTION__);
 }
 
+- (IBAction)didPressReportButton:(id)sender {
+    NSAssert(NO, @"Error! required method not implemented in subclass. Need to implement %s", __PRETTY_FUNCTION__);
+}
+
 #pragma mark - Key-value observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -984,7 +996,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (BOOL)jsq_inputToolbarHasReachedMaximumHeight
 {
-    return CGRectGetMinY(self.inputToolbar.frame) == (self.topLayoutGuide.length + self.topContentAdditionalInset);
+    return CGRectGetMinY(self.inputToolbar.frame) == (self.topLayoutGuide.length + self.topContentAdditionalInset + self.bottomContentAdditionalInset);
 }
 
 - (void)jsq_adjustInputToolbarForComposerTextViewContentSizeChange:(CGFloat)dy
@@ -1004,8 +1016,8 @@ JSQMessagesKeyboardControllerDelegate>
     CGFloat newToolbarOriginY = toolbarOriginY - dy;
 
     //  attempted to increase origin.Y above topLayoutGuide
-    if (newToolbarOriginY <= self.topLayoutGuide.length + self.topContentAdditionalInset) {
-        dy = toolbarOriginY - (self.topLayoutGuide.length + self.topContentAdditionalInset);
+    if (newToolbarOriginY <= self.topLayoutGuide.length + self.topContentAdditionalInset + self.bottomContentAdditionalInset) {
+        dy = toolbarOriginY - (self.topLayoutGuide.length + self.topContentAdditionalInset + self.bottomContentAdditionalInset);
         [self jsq_scrollComposerTextViewToBottomAnimated:YES];
     }
 
@@ -1059,7 +1071,7 @@ JSQMessagesKeyboardControllerDelegate>
 - (void)jsq_updateCollectionViewInsets
 {
     [self jsq_setCollectionViewInsetsTopValue:self.topLayoutGuide.length + self.topContentAdditionalInset
-                                  bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(self.inputToolbar.frame)];
+                                  bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(self.inputToolbar.frame) + self.bottomContentAdditionalInset];
 }
 
 - (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom

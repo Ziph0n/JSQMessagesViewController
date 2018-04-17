@@ -172,7 +172,15 @@
  */
 @property (assign, nonatomic) CGFloat topContentAdditionalInset;
 
+@property (assign, nonatomic) CGFloat bottomContentAdditionalInset;
+
 @property (strong, nonatomic) IBOutlet UIButton *finishButton;
+
+@property (strong, nonatomic) IBOutlet UIButton *reportButton;
+
+@property (strong, nonatomic) IBOutlet UIView *bottomView;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomViewHeightConstraint;
 
 #pragma mark - Class methods
 
@@ -327,5 +335,7 @@
 - (void)didReceiveMenuWillHideNotification:(NSNotification *)notification;
 
 - (IBAction)didPressFinishButton:(id)sender;
+
+- (IBAction)didPressReportButton:(id)sender;
 
 @end
